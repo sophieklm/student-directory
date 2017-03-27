@@ -1,3 +1,4 @@
+require 'date'
 #put students into a hash
 def default_students
   students = [
@@ -15,31 +16,39 @@ def default_students
 ]
 end
 
+def student_info
+  puts "Name: "
+  $name = gets.chomp
+  puts "Cohort: "
+  $cohort = gets.chomp
+    if $cohort.empty?
+      $cohort = :november
+    elsif !(Date::MONTHNAMES.compact).include?($cohort)
+      puts "That isn't a real month, try again"
+      puts "Cohort: "
+      $cohort = gets.chomp
+    end
+  puts "Country: "
+  $country = gets.chomp
+  puts "Hobby: "
+  $hobby = gets.chomp
+end
+
 def input_students
   puts "Please enter the names of the students"
   puts "To finish, hit return twice"
   puts "A default student list will be used if no names are entered"
   #create empty array
   students = []
-  #get first name
-  puts "Name: "
-  name = gets.chomp
-  puts "Country: "
-  country = gets.chomp
-  puts "Hobby: "
-  hobby = gets.chomp
+  #get info
+  student_info
   #while name not empty, repeat
-  while !name.empty? do
+  while !$name.empty? do
     #add student hash to array
-    students << {name: name, cohort: :november, country: country, hobby: hobby}
+    students << {name: $name, cohort: $cohort.to_sym, country: $country, hobby: $hobby}
     puts "Now we have #{students.count} students"
     #get another name
-    puts "Name: "
-    name = gets.chomp
-    puts "Country: "
-    country = gets.chomp
-    puts "Hobby: "
-    hobby = gets.chomp
+    student_info
   end
   #return default list if no names entered
     if students.count == 0
