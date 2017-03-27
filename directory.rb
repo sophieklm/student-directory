@@ -33,7 +33,7 @@ def input_students
 end
 
 def print_header
-  puts "The students of Villains Academy whose names start with #{$first_letter}:"
+  puts "The students of Villains Academy whose names are less than #{$char_num} characters:"
   puts "-------------"
 end
 
@@ -44,8 +44,17 @@ def print(students)
 end
 
 def print_with_letter(students, letter)
-  students.each_with_index() do |student, index|
+  students.each_with_index do |student, index|
     if student[:name][0] == letter
+      puts "#{index + 1}. #{student[:name]} (#{student[:cohort]} cohort)"
+    else
+    end
+  end
+end
+
+def print_num_chars(students, chars)
+  students.each_with_index do |student, index|
+    if student[:name].length < chars
       puts "#{index + 1}. #{student[:name]} (#{student[:cohort]} cohort)"
     else
     end
@@ -59,10 +68,12 @@ end
 #call methods
 students = default_students
 
-puts "Enter a letter:"
-$first_letter = gets.chomp.upcase
+#puts "Enter a letter:"
+#$first_letter = gets.chomp.upcase
+$char_num = 12
 
 print_header
 #print(students)
-print_with_letter(students, $first_letter)
+#print_with_letter(students, $first_letter)
+print_num_chars(students, $char_num)
 print_footer(students)
