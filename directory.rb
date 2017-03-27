@@ -1,33 +1,50 @@
 #put students into a hash
-default_students = [
-  {name: "Dr. Hannibal Lecter", cohort: :november},
-  {name: "Darth Vader", cohort: :november},
-  {name: "Nurse Ratched", cohort: :november},
-  {name: "Michael Corleone", cohort: :november},
-  {name: "Alex DeLarge", cohort: :november},
-  {name: "The Wicked Witch of the West", cohort: :november},
-  {name: "Terminator", cohort: :november},
-  {name: "Freddy Krueger", cohort: :november},
-  {name: "The Joker", cohort: :november},
-  {name: "Joffrey Baratheon", cohort: :november},
-  {name: "Norman Bates", cohort: :november}
+def default_students
+  students = [
+  {name: "Dr. Hannibal Lecter",cohort: :november,  country: "USA", hobby: "cannibalism"},
+  {name: "Darth Vader", cohort: :november,  country: "Space", hobby: "war"},
+  {name: "Nurse Ratched", cohort: :november,  country: "Belarus", hobby: "kindness"},
+  {name: "Michael Corleone", cohort: :november,  country: "Spain", hobby: "sport"},
+  {name: "Alex DeLarge", cohort: :november, country: "France", hobby: "comedy"},
+  {name: "The Wicked Witch of the West", cohort: :november ,country: "Oz", hobby: "magic"},
+  {name: "Terminator", cohort: :november, country: "AI", hobby: "computers"},
+  {name: "Freddy Krueger", cohort: :november, country: "Germany", hobby: "murder"},
+  {name: "The Joker", cohort: :november, country: "Unknown", hobby: "magic"},
+  {name: "Joffrey Baratheon", cohort: :november, country: "Westeros", hobby: "being annoying"},
+  {name: "Norman Bates", cohort: :november, country: "America", hobby: "murder"}
 ]
+end
 
 def input_students
   puts "Please enter the names of the students"
   puts "To finish, hit return twice"
+  puts "A default student list will be used if no names are entered"
   #create empty array
   students = []
   #get first name
+  puts "Name: "
   name = gets.chomp
+  puts "Country: "
+  country = gets.chomp
+  puts "Hobby: "
+  hobby = gets.chomp
   #while name not empty, repeat
   while !name.empty? do
     #add student hash to array
-    students << {name: name, cohort: :november}
+    students << {name: name, cohort: :november, country: country, hobby: hobby}
     puts "Now we have #{students.count} students"
     #get another name
+    puts "Name: "
     name = gets.chomp
+    puts "Country: "
+    country = gets.chomp
+    puts "Hobby: "
+    hobby = gets.chomp
   end
+  #return default list if no names entered
+    if students.count == 0
+      students = default_students
+    end
   #return array of students
   students
 end
@@ -40,26 +57,8 @@ end
 def print(students)
   count = 0
   while count < students.count
-    puts "#{count + 1}. #{students[count][:name]} (#{students[count][:cohort]} cohort)"
+    puts "#{count + 1}. #{students[count][:name]} (#{students[count][:cohort]} cohort) from #{students[count][:country]} likes #{students[count][:hobby]}"
     count += 1
-  end
-end
-
-def print_with_letter(students, letter)
-  students.each_with_index do |student, index|
-    if student[:name][0] == letter
-      puts "#{index + 1}. #{student[:name]} (#{student[:cohort]} cohort)"
-    else
-    end
-  end
-end
-
-def print_num_chars(students, chars)
-  students.each_with_index do |student, index|
-    if student[:name].length < chars
-      puts "#{index + 1}. #{student[:name]} (#{student[:cohort]} cohort)"
-    else
-    end
   end
 end
 
@@ -68,14 +67,7 @@ def print_footer(students)
 end
 
 #call methods
-students = default_students
-
-#puts "Enter a letter:"
-#$first_letter = gets.chomp.upcase
-$char_num = 12
-
+students = input_students
 print_header
 print(students)
-#print_with_letter(students, $first_letter)
-#print_num_chars(students, $char_num)
 print_footer(students)
