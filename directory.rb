@@ -49,21 +49,25 @@ def input_students
   students
 end
 
+def print_to_center(string)
+  puts string.center(120)
+end
+
 def print_header
-  puts "The students of Villains Academy"
-  puts "-------------"
+  puts print_to_center("The students of Villains Academy")
+  puts print_to_center("-------------")
 end
 
 def print(students)
   count = 0
   while count < students.count
-    puts "#{count + 1}. #{students[count][:name]} (#{students[count][:cohort]} cohort) from #{students[count][:country]} likes #{students[count][:hobby]}"
+    puts print_to_center("#{count + 1}. #{students[count][:name]} (#{students[count][:cohort]} cohort) from #{students[count][:country]} likes #{students[count][:hobby]}")
     count += 1
   end
 end
 
 def print_footer(students)
-  puts "Overall, we have #{students.count} great students"
+  puts print_to_center("Overall, we have #{students.count} great students")
 end
 
 #call methods
