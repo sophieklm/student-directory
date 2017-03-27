@@ -33,13 +33,15 @@ def input_students
 end
 
 def print_header
-  puts "The students of Villains Academy whose names are less than #{$char_num} characters:"
+  puts "The students of Villains Academy"
   puts "-------------"
 end
 
 def print(students)
-  students.each_with_index do |student, index|
-    puts "#{index + 1}. #{student[:name]} (#{student[:cohort]} cohort)"
+  count = 0
+  while count < students.count
+    puts "#{count + 1}. #{students[count][:name]} (#{students[count][:cohort]} cohort)"
+    count += 1
   end
 end
 
@@ -73,7 +75,7 @@ students = default_students
 $char_num = 12
 
 print_header
-#print(students)
+print(students)
 #print_with_letter(students, $first_letter)
-print_num_chars(students, $char_num)
+#print_num_chars(students, $char_num)
 print_footer(students)
