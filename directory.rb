@@ -3,6 +3,7 @@ require 'active_support/inflector'
 
 @students = []
 @default_cohort = :november
+@filename = "students.csv"
 
 def interactive_menu
   loop do
@@ -14,7 +15,8 @@ def interactive_menu
 end
 
 def print_menu
-  puts "1. Input the students"
+  puts "-------------\nWhat would you like to do?\n-------------"
+  puts "1. Input a student"
   puts "2. Show the students"
   puts "3. Save the list to students.csv"
   puts "4. Load the list from students.csv"
@@ -57,15 +59,18 @@ def save_students
     csv_line = student_data.join(",")
     file.puts csv_line
   end
+  puts "Saved #{@students.count} to #{@filename}"
   file.close
 end
 
-def load_students(filename = "students.csv")
-  file = File.open(filename, "r")
+def load_students
+  line_count = `wc -l "#{@filename}"`.strip.split(' ')[0].to_i
+  file = File.open(@filename, "r")
   file.readlines.each do |line|
     name, cohort, country, hobby = line.chomp.split(",")
     add_student(name, cohort, country, hobby)
   end
+  puts "Loaded #{line_count} from #{@filename}"
   file.close
 end
 
@@ -74,13 +79,12 @@ def add_student(name, cohort, country, hobby)
 end
 
 def try_load_students
-  ARGV.first.nil? ? filename = "students.csv" : filename = ARGV.first #first arg from command line
+  ARGV.first.nil? ? @filename : @filename = ARGV.first #first arg from command line
   #return if filename.nil? #get out of the method if not given
-  if File.exists?(filename)
-    load_students(filename)
-    puts "Loaded #{@students.count} from #{filename}"
+  if File.exists?(@filename)
+    load_students
   else
-    puts "Sorry, #{filename} doesn't exist."
+    puts "Sorry, #{@filename} doesn't exist."
     exit
   end
 end
@@ -121,19 +125,19 @@ def student_info
 end
 
 def input_students
-  puts "Please enter the details of the students"
-  puts "To finish, hit return twice"
-  puts "A default student list will be used if no names are entered"
+  puts "Please enter the details of the student"
+  #puts "To finish, hit return twice"
+  #puts "A default student list will be used if no names are entered"
   #get info
   student_info
-  #while name not empty, repeat
-  while !$name.empty? do
+  #if not empty add to array (changed from while)
+  if !$name.empty?
     #add student hash to array
-    add_student($name, $cohort = @default_cohort, $country, $hobby)
-    puts "Now we have #{@students.count} students"
+    add_student($name, $cohort, $country, $hobby)
     #get another name
-    student_info
+    #student_info
   end
+  puts "-------------\nNow we have #{@students.count} students"
   #return default list if no names entered
     if @students.count == 0
       @students = default_students
@@ -162,21 +166,25 @@ def print_students_list
   $cohort = sort_by_cohort
   $cohort.each do |month|
     month_name = Date::MONTHNAMES[month]
-    puts print_to_center("-------------")
+    add_filler
     puts print_to_center("#{month_name} cohort")
-    puts print_to_center("-------------")
+    add_filler
     count = 0
     @students.each do |student|
       if Date::MONTHNAMES.index(student[:cohort].capitalize.to_s) == month
-        puts print_to_center("#{count + 1}. #{student[:name]} (#{student[:cohort]} cohort) from #{student[:country]} likes #{student[:hobby]}")
+        puts print_to_center("#{count + 1}. #{student[:name]} (#{student[:cohort].capitalize} cohort) from #{student[:country]} likes #{student[:hobby]}")
         count += 1
       end
     end
   end
 end
 
-def print_footer
+def add_filler
   puts print_to_center("-------------")
+end
+
+def print_footer
+  add_filler
   puts print_to_center("Overall, we have #{@students.count} great " + "student".pluralize(@students.count) + " from #{$cohort.count} " + "cohort".pluralize($cohort.count))
 end
 
