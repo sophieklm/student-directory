@@ -2,17 +2,17 @@ require 'date'
 #put students into a hash
 def default_students
   students = [
-  {name: "Dr. Hannibal Lecter",cohort: :november,  country: "USA", hobby: "cannibalism"},
-  {name: "Darth Vader", cohort: :november,  country: "Space", hobby: "war"},
+  {name: "Dr. Hannibal Lecter",cohort: :june,  country: "USA", hobby: "cannibalism"},
+  {name: "Darth Vader", cohort: :may,  country: "Space", hobby: "war"},
   {name: "Nurse Ratched", cohort: :november,  country: "Belarus", hobby: "kindness"},
-  {name: "Michael Corleone", cohort: :november,  country: "Spain", hobby: "sport"},
+  {name: "Michael Corleone", cohort: :october,  country: "Spain", hobby: "sport"},
   {name: "Alex DeLarge", cohort: :november, country: "France", hobby: "comedy"},
   {name: "The Wicked Witch of the West", cohort: :november ,country: "Oz", hobby: "magic"},
   {name: "Terminator", cohort: :november, country: "AI", hobby: "computers"},
   {name: "Freddy Krueger", cohort: :november, country: "Germany", hobby: "murder"},
   {name: "The Joker", cohort: :november, country: "Unknown", hobby: "magic"},
-  {name: "Joffrey Baratheon", cohort: :november, country: "Westeros", hobby: "being annoying"},
-  {name: "Norman Bates", cohort: :november, country: "America", hobby: "murder"}
+  {name: "Joffrey Baratheon", cohort: :may, country: "Westeros", hobby: "being annoying"},
+  {name: "Norman Bates", cohort: :june, country: "America", hobby: "murder"}
 ]
 end
 
@@ -58,25 +58,42 @@ def input_students
   students
 end
 
+def sort_by_cohort(students)
+  cohort_list = []
+  students.map do |student|
+    cohort_list << Date::MONTHNAMES.index(student[:cohort].capitalize.to_s)
+  end
+  cohort_list.uniq.sort
+end
+
 def print_to_center(string)
   puts string.center(120)
 end
 
 def print_header
   puts print_to_center("The students of Villains Academy")
-  puts print_to_center("-------------")
 end
 
 def print(students)
-  count = 0
-  while count < students.count
-    puts print_to_center("#{count + 1}. #{students[count][:name]} (#{students[count][:cohort]} cohort) from #{students[count][:country]} likes #{students[count][:hobby]}")
-    count += 1
+  $cohort = sort_by_cohort(students)
+  $cohort.each do |month|
+    month_name = Date::MONTHNAMES[month]
+    puts print_to_center("-------------")
+    puts print_to_center("#{month_name} cohort")
+    puts print_to_center("-------------")
+    count = 0
+    students.each do |student|
+      if Date::MONTHNAMES.index(student[:cohort].capitalize.to_s) == month
+        puts print_to_center("#{count + 1}. #{student[:name]} (#{student[:cohort]} cohort) from #{student[:country]} likes #{student[:hobby]}")
+        count += 1
+      end
+    end
   end
 end
 
 def print_footer(students)
-  puts print_to_center("Overall, we have #{students.count} great students")
+  puts print_to_center("-------------")
+  puts print_to_center("Overall, we have #{students.count} great students from #{$cohort.count} cohorts")
 end
 
 #call methods
