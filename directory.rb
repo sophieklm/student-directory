@@ -1,4 +1,5 @@
 require 'date'
+require 'active_support/inflector'
 #put students into a hash
 def default_students
   students = [
@@ -93,7 +94,7 @@ end
 
 def print_footer(students)
   puts print_to_center("-------------")
-  puts print_to_center("Overall, we have #{students.count} great students from #{$cohort.count} cohorts")
+  puts print_to_center("Overall, we have #{students.count} great " + "student".pluralize(students.count) + " from #{$cohort.count} " + "cohort".pluralize($cohort.count))
 end
 
 #call methods
