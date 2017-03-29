@@ -1,5 +1,35 @@
 require 'date'
 require 'active_support/inflector'
+
+def interactive_menu
+  students = []
+  loop do
+    #print menu
+    puts "1. Input the students"
+    puts "2. Show the students"
+    puts "9. Exit"
+    #read input and save as variable
+    selection = gets.chomp
+    #do what user has asked
+    case selection
+    when "1" #input students
+      students = input_students
+    when "2" #show students
+      if students.count == 0
+        puts "There are no students at Villains Academy"
+      else
+        print_header
+        print(students)
+        print_footer(students)
+      end
+    when "9" #terminate program
+      exit
+    else
+      puts "I don't understand that, please try again"
+    end
+  end
+end
+
 #put students into a hash
 def default_students
   students = [
@@ -97,12 +127,5 @@ def print_footer(students)
   puts print_to_center("Overall, we have #{students.count} great " + "student".pluralize(students.count) + " from #{$cohort.count} " + "cohort".pluralize($cohort.count))
 end
 
-#call methods
-students = input_students
-if students.count == 0
-  puts "There are no students at Villains Academy"
-else
-print_header
-print(students)
-print_footer(students)
-end
+#call method
+interactive_menu
