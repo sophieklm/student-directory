@@ -99,6 +99,10 @@ end
 
 #call methods
 students = input_students
+if students.count == 0
+  puts "There are no students at Villains Academy"
+else
 print_header
 print(students)
 print_footer(students)
+end
