@@ -67,7 +67,7 @@ end
 def save_students
   ask_for_file
   #open file
-  file = File.open("students.csv", "w")
+  File.open("students.csv", "w") do |file|
   #iterate over array
   @students.each do |student|
     student_data = [student[:name], student[:cohort], student[:country], student[:hobby]]
@@ -75,17 +75,17 @@ def save_students
     file.puts csv_line
   end
   puts "Saved #{@students.count} students to #{@filename}"
-  file.close
+  end
 end
 
 def load_students
-  file = File.open(@filename, "r")
+  File.open(@filename, "r") do |file|
   file.readlines.each do |line|
     name, cohort, country, hobby = line.chomp.split(",")
     add_student(name, cohort, country, hobby)
   end
   puts "Loaded #{@line_count} from #{@filename}"
-  file.close
+  end
 end
 
 def add_student(name, cohort, country, hobby)
