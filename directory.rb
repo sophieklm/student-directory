@@ -4,6 +4,7 @@ require 'active_support/inflector'
 @students = []
 @default_cohort = :november
 @filename = "students.csv"
+@line_count = `wc -l "#{@filename}"`.strip.split(' ')[0].to_i
 
 def interactive_menu
   loop do
@@ -18,8 +19,8 @@ def print_menu
   puts "-------------\nWhat would you like to do?\n-------------"
   puts "1. Input a student"
   puts "2. Show the students"
-  puts "3. Save the list to students.csv"
-  puts "4. Load the list from students.csv"
+  puts "3. Save the list"
+  puts "4. Load the list"
   puts "9. Exit"
 end
 
@@ -32,11 +33,24 @@ def process(selection)
   when "3"
     save_students
   when "4"
+    ask_for_file
     load_students
+    puts "Now we have #{@students.count} students"
   when "9" #terminate program
     exit
   else
     puts "I don't understand that, please try again"
+  end
+end
+
+def ask_for_file
+  puts "What is the name of the file?"
+  file = STDIN.gets.chomp
+  if file.empty?
+    puts "Using default file #{@filename}"
+    @filename = @filename
+  else
+    @filename = file
   end
 end
 
@@ -51,6 +65,7 @@ def show_students
 end
 
 def save_students
+  ask_for_file
   #open file
   file = File.open("students.csv", "w")
   #iterate over array
@@ -59,18 +74,17 @@ def save_students
     csv_line = student_data.join(",")
     file.puts csv_line
   end
-  puts "Saved #{@students.count} to #{@filename}"
+  puts "Saved #{@students.count} students to #{@filename}"
   file.close
 end
 
 def load_students
-  line_count = `wc -l "#{@filename}"`.strip.split(' ')[0].to_i
   file = File.open(@filename, "r")
   file.readlines.each do |line|
     name, cohort, country, hobby = line.chomp.split(",")
     add_student(name, cohort, country, hobby)
   end
-  puts "Loaded #{line_count} from #{@filename}"
+  puts "Loaded #{@line_count} from #{@filename}"
   file.close
 end
 
