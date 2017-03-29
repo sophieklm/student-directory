@@ -2,6 +2,7 @@ require 'date'
 require 'active_support/inflector'
 
 @students = []
+@default_cohort = :november
 
 def interactive_menu
   loop do
@@ -63,9 +64,13 @@ def load_students(filename = "students.csv")
   file = File.open(filename, "r")
   file.readlines.each do |line|
     name, cohort, country, hobby = line.chomp.split(",")
-    @students << {name: name, cohort: cohort.to_sym, country: country, hobby: hobby}
+    add_student(name, cohort, country, hobby)
   end
   file.close
+end
+
+def add_student(name, cohort, country, hobby)
+  @students << {name: name, cohort: cohort.to_sym, country: country, hobby: hobby}
 end
 
 def try_load_students
@@ -124,7 +129,7 @@ def input_students
   #while name not empty, repeat
   while !$name.empty? do
     #add student hash to array
-    @students << {name: $name, cohort: $cohort.to_sym, country: $country, hobby: $hobby}
+    add_student($name, $cohort = @default_cohort, $country, $hobby)
     puts "Now we have #{@students.count} students"
     #get another name
     student_info
