@@ -74,8 +74,8 @@ def add_student(name, cohort, country, hobby)
 end
 
 def try_load_students
-  filename = ARGV.first #first arg from command line
-  return if filename.nil? #get out of the method if not given
+  ARGV.first.nil? ? filename = "students.csv" : filename = ARGV.first #first arg from command line
+  #return if filename.nil? #get out of the method if not given
   if File.exists?(filename)
     load_students(filename)
     puts "Loaded #{@students.count} from #{filename}"
